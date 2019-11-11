@@ -16,7 +16,7 @@ gdt_data:
     dw 0xffff       ;same as above, difference if one flag
     dw 0x0
     db 0x0
-    db 10010010b    ;changed flag
+    db 10010010b    ;changed Executable bit (set 0 for data selector)
     db 11001111b
     db 0x0
 
