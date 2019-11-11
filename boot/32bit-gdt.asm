@@ -5,18 +5,18 @@ gdt_null:
     dd 0x0
 
 gdt_code:
-    dw 0xffff
-    dw 0x0
-    db 0x0
-    db 10011010b
-    db 11001111b
-    db 0x0
+    dw 0xffff       ;limit bits 0-15
+    dw 0x0          ;base bits 0-15
+    db 0x0          ;base bits 16-23
+    db 10011010b    ;flags bits 15-8 (including type flags)
+    db 11001111b    ;flags bits 23-16 (including segment limit flags)
+    db 0x0          ;base bits 31-24
 
 gdt_data:
-    dw 0xffff
+    dw 0xffff       ;same as above, difference if one flag
     dw 0x0
     db 0x0
-    db 10010010b
+    db 10010010b    ;changed flag
     db 11001111b
     db 0x0
 
