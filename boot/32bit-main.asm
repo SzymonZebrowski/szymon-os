@@ -25,7 +25,7 @@ load_kernel:
     call print_nl
                                         ; we read 2 sectors from bootdisk and save it to [KERNEL_OFFSET]
     mov bx, KERNEL_OFFSET               ; ES:BX - pointer to buffer
-    mov dh, 2                           ; number of sectors to read
+    mov dh, 16                           ; number of sectors to read
     mov dl, [BOOT_DRIVE]                ; bootdisk
     call disk_load
     ret
