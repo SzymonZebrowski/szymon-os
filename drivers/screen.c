@@ -1,5 +1,6 @@
 #include "screen.h"
 #include "ports.h"
+#include "../kernel/util.h"
 
 int get_cursor_offset();
 void set_cursor_offset(int offset);
@@ -21,7 +22,7 @@ void print_coloristic(){
     }
 }
 
-void kprint_at(char *message, int col, int row) {
+void kprint_at(char *message, int col, int row, char attr) {
     /* Set cursor if col/row are negative */
     int offset;
     if (col >= 0 && row >= 0)
@@ -35,15 +36,15 @@ void kprint_at(char *message, int col, int row) {
     /* Loop through message and print it */
     int i = 0;
     while (message[i] != 0) {
-        offset = print_char(message[i++], col, row, color_mode(BLACK, WHITE));
+        offset = print_char(message[i++], col, row, attr);
         /* Compute row/col for next iteration */
         row = get_offset_row(offset);
         col = get_offset_col(offset);
     }
 }
 
-void kprint(char *message) {
-    kprint_at(message, -1, -1);
+void kprint(char *message, char attr) {
+    kprint_at(message, -1, -1, attr);
 }
 
 int print_char(char c, int col, int row, char attr) {
@@ -70,6 +71,21 @@ int print_char(char c, int col, int row, char attr) {
         video_mem[offset+1] = attr;
         offset += 2;
     }
+
+    // Check if offset is greater than screen size and scroll if necessary
+    if(offset >= MAX_ROWS*MAX_COLS*2){
+        int i=1;
+        for(i; i<MAX_ROWS; i++){
+            memory_copy(get_offset(0, i) + VIDEO_ADDRESS, 
+                        get_offset(0,i-1) + VIDEO_ADDRESS, 
+                        MAX_COLS*2);             //copy whole line
+        }
+
+        char *last_line = get_offset(0, MAX_ROWS-1)+VIDEO_ADDRESS;
+        for(i = 0; i< MAX_COLS*2; i++) last_line[i]=0;
+        offset -= 2*MAX_COLS;
+    }
+
     set_cursor_offset(offset);
     return offset;
 }
@@ -102,7 +118,7 @@ void clear_screen() {
 
     for (i = 0; i < screen_size; i++) {
         screen[i*2] = ' ';
-        screen[i*2+1] = color_mode(BLACK, GREEN);
+        screen[i*2+1] = color_mode(BLACK, WHITE);
     }
     set_cursor_offset(get_offset(0, 0));
 }

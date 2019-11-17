@@ -1,11 +1,22 @@
+#include "util.h"
 #include "../drivers/screen.h"
 
 void main(){
     clear_screen();
-    kprint_at("X", 1, 6);
-    kprint_at("This text spans multiple lines", 75, 10);
-    kprint_at("There is a line\nbreak", 0, 20);
-    kprint("There is a line\nbreak");
-    kprint_at("What happens when we run out of space?", 45, 24);
+    introduce();
+
+    /* Fill up the screen */
+    int i = 0;
+    for (i = 0; i < 23; i++) {
+        char str[255];
+        int_to_str(i, str);
+        kprint_at(str, 0, i, color_mode(BLACK, WHITE));
+    }
+
+    clear_screen();
+    introduce();
+
+    //kprint_at("This text forces the kernel to scroll. Row 0 will disappear. ", 60, 24, color_mode(BLACK,WHITE));
+    kprint("And with this text, the kernel will scroll again, and row 1 will disappear too!", color_mode(BLACK,WHITE));
 
 }

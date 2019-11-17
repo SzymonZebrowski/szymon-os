@@ -26,6 +26,6 @@
 #define REG_SCREEN_DATA 0x3D5
 
 void clear_screen();                                //clear screen
-void kprint_at(char *message, int col, int row);    //print message starting at ...
-void kprint(char *message);
+void kprint_at(char *message, int col, int row, char attr);    //print message starting at ...
+void kprint(char *message, char attr);
 void print_coloristic();
