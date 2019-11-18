@@ -2,9 +2,9 @@
 # $< = first dependency
 # $^ = all dependencies
 
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h)
-OBJ = ${C_SOURCES:.c=.o}
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
+OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
 CC = ~/opt/cross/bin/i686-elf-gcc
 GDB = ~/opt/cross/bin/i686-elf-gdb

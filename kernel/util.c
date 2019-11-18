@@ -1,4 +1,8 @@
+#ifndef UTIL_H
+#define UTIL_H
+
 #include "../drivers/screen.h"
+#include "../cpu/types.h"
 
 void memory_copy(char *source, char *dest, int n){
     int i=0;
@@ -69,3 +73,5 @@ void introduce(){
     }
 
 }
+
+#endif

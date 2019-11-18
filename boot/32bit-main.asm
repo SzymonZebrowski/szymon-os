@@ -25,7 +25,7 @@ load_kernel:
     call print_nl
                                         ; we read 2 sectors from bootdisk and save it to [KERNEL_OFFSET]
     mov bx, KERNEL_OFFSET               ; ES:BX - pointer to buffer
-    mov dh, 16                           ; number of sectors to read
+    mov dh, 31                          ; number of sectors to read
     mov dl, [BOOT_DRIVE]                ; bootdisk
     call disk_load
     ret
@@ -42,6 +42,7 @@ BEGIN_PM:
 MSG_16B_RM db "Started in 16 bit real mode", 0
 MSG_32B_PM db "Loaded 32 bit protected mode", 0
 MSG_LOAD_KERNEL db "Loading kernel into memory", 0
+MSG_RETURNED_KERNEL db "Returned from kernel", 0
 BOOT_DRIVE db 0
 
 times 510-($-$$) db 0
