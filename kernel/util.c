@@ -122,6 +122,7 @@ void print_clock(clock_t *clk){
     kprint(str, color_mode(BLACK, RED));
     kprint("\n", color_mode(BLACK, RED));
 
+
     set_cursor_offset(offset);
 }
 
