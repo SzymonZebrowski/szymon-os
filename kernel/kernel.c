@@ -26,8 +26,7 @@ void main(){
     isr_install();
     /* Test the interrupts */
 
-    //asm volatile("sti");
-    init_timer(50);
-    read_rtc();
-
+    asm volatile("sti");
+    init_timer(50);  
+    kprint("xdd", color_mode(RED, BLUE));
 }

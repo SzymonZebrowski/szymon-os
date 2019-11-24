@@ -1,18 +1,32 @@
 #include "timer.h"
 #include "../drivers/screen.h"
 #include "../kernel/util.h"
+#include "clock.h"
 #include "isr.h"
 
 u32 tick = 0;
+static u32 pit_timeout_value = 0;
+
+void pit_timeout_set(u32 val){
+    pit_timeout_value = val;
+}
+
+void pit_timeout_unset() {
+    pit_timeout_value = 0;
+}
+
+u8 pit_timeout_reached(){
+    return !(pit_timeout_value>0);
+}
 
 static void timer_callback(registers_t regs) {
-    tick++;
-    kprint("Tick: ", color_mode(BLACK, WHITE));
-    
-    char tick_ascii[256];
-    int_to_str(tick, tick_ascii);
-    kprint(tick_ascii, color_mode(BLACK, WHITE));
-    kprint("\n", color_mode(BLACK, WHITE));
+    clock_t* clk = (clock_t*)read_rtc();
+
+    print_clock(clk);
+
+    if(pit_timeout_value){
+        pit_timeout_value--;
+    }
 }
 
 void init_timer(u32 freq) {

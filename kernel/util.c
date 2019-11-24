@@ -2,7 +2,9 @@
 #define UTIL_H
 
 #include "../drivers/screen.h"
+
 #include "../cpu/types.h"
+#include "../cpu/clock.h"
 
 void memory_copy(char *source, char *dest, int n){
     int i=0;
@@ -36,7 +38,29 @@ void int_to_str(int n, char str[]){
 
 }
 
+void int_to_0_at_beg_str(int n, char str[]){
+    int i=0;
+    int org = n;
+    do{
+        str[i++] = n%10 + '0';
+    } while(n/=10);
+
+    
+    if(org<10) str[i++] = '0';
+
+    i-=1;
+
+    int j=0;
+    for(j; j<(i+1)/2;j++){
+            char t=str[j];
+            str[j] = str[i-j];
+            str[i-j] = t;
+    }
+    
+    str[++i]='\0';
+}
 void introduce(){
+    kprint("\n",color_mode(BLACK, WHITE));
     char str[6*80] =        
 "\n"                                           
 "             _________  __  ______ ___  ____  ____        ____  _____ \n"
@@ -65,13 +89,40 @@ void introduce(){
 
     //side bounds
     for(i=0; i<(LINES+1)/2; i++){
-        kprint_at(" ", 0, 2*i+1, color_mode(BRIGHT_MAGENTA, WHITE));
-        kprint_at(" ", 79, 2*i+1, color_mode(CYAN, WHITE));
+        kprint_at(" ", 0, 2*i+2, color_mode(BRIGHT_MAGENTA, WHITE));
+        kprint_at(" ", 79, 2*i+2, color_mode(CYAN, WHITE));
         
-        kprint_at(" ", 0, 2*(i+1), color_mode(CYAN, WHITE));
-        kprint_at(" ", 79, 2*(i+1), color_mode(BRIGHT_MAGENTA, WHITE));
+        kprint_at(" ", 0, 2*(i+1)+1, color_mode(CYAN, WHITE));
+        kprint_at(" ", 79, 2*(i+1)+1, color_mode(BRIGHT_MAGENTA, WHITE));
     }
 
+}
+
+void print_clock(clock_t *clk){
+    u32 offset = get_cursor_offset();
+
+    char str[256];
+    int_to_0_at_beg_str(clk->month, str);
+    kprint_at(str, 30, 0, color_mode(BLACK, RED));
+    kprint("-", color_mode(BLACK, RED));
+    int_to_0_at_beg_str(clk->day, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint("-", color_mode(BLACK, RED));
+    int_to_0_at_beg_str(clk->year, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint("  ", color_mode(BLACK, RED));
+
+    int_to_0_at_beg_str(clk->hour, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint(":", color_mode(BLACK, RED));
+    int_to_0_at_beg_str(clk->minute, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint(":", color_mode(BLACK, RED));
+    int_to_0_at_beg_str(clk->second, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint("\n", color_mode(BLACK, RED));
+
+    set_cursor_offset(offset);
 }
 
 #endif

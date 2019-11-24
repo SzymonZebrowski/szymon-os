@@ -32,5 +32,6 @@ void clear_screen();                                //clear screen
 void kprint_at(char *message, int col, int row, char attr);    //print message starting at ...
 void kprint(char *message, char attr);
 void print_coloristic();
-
+int get_cursor_offset();
+void set_cursor_offset(int offset);
 #endif
