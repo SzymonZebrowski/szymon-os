@@ -1,6 +1,6 @@
 #include "screen.h"
 #include "ports.h"
-#include "../kernel/util.h"
+#include "../libc/mem.h"
 
 int get_cursor_offset();
 void set_cursor_offset(int offset);
@@ -47,6 +47,14 @@ void kprint(char *message, char attr) {
     kprint_at(message, -1, -1, attr);
 }
 
+void kprint_backspace() {
+    int offset = get_cursor_offset()-2;
+    int row = get_offset_row(offset);
+    int col = get_offset_col(offset);
+    print_char(0x08, col, row, color_mode(BLACK,WHITE));
+
+}
+
 int print_char(char c, int col, int row, char attr) {
     unsigned char *video_mem = (unsigned char*) VIDEO_ADDRESS;
     if (!attr) attr = color_mode(BLACK, WHITE); //set default color if not set
@@ -66,7 +74,12 @@ int print_char(char c, int col, int row, char attr) {
     if (c == '\n') {
         row = get_offset_row(offset);
         offset = get_offset(0, row+1);
-    } else {
+    } 
+    else if (c==0x08){
+        video_mem[offset] = ' ';
+        video_mem[offset+1] = attr;
+    }
+    else {
         video_mem[offset] = c;
         video_mem[offset+1] = attr;
         offset += 2;
