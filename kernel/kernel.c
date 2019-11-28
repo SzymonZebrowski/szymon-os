@@ -18,6 +18,7 @@ void user_input(char *input){
     }
      else if(strcmp(input, "CLEAR") == 0){
         clear_screen();
+        kprint("\n",color_mode(BLACK,WHITE));
     }
       else if(strcmp(input, "OS") == 0){
         clear_screen();
@@ -30,6 +31,7 @@ void user_input(char *input){
 void main(){
     clear_screen();
     introduce();
+    kprint("> ",color_mode(BLACK,WHITE));
 
     isr_install();
     irq_install();
