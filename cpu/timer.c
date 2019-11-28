@@ -1,6 +1,6 @@
 #include "timer.h"
 #include "../drivers/screen.h"
-#include "../kernel/util.h"
+#include "../libc/util.h"
 #include "clock.h"
 #include "isr.h"
 

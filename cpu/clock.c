@@ -1,7 +1,7 @@
 #include "clock.h"
 #include "../drivers/ports.h"
 #include "../drivers/screen.h"
-#include "../kernel/util.h"
+#include "../libc/util.h"
 
 #define CURRENT_YEAR 2019
  

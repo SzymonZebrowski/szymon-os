@@ -1,7 +1,7 @@
 #include "isr.h"
 #include "idt.h"
 #include "../drivers/screen.h"
-#include "../kernel/util.h"
+#include "../libc/util.h"
 #include "../drivers/ports.h"
 
 isr_t interrupt_handlers[256];
@@ -72,6 +72,15 @@ void isr_install(){
 
 
     set_idt(); // Load with ASM
+}
+
+void irq_install() {
+    /* Enable interruptions */
+    asm volatile("sti");
+    /* IRQ0: timer */
+    init_timer(50);
+    /* IRQ1: keyboard */
+    init_keyboard();
 }
 
 char *exception_messages[] = {
