@@ -5,4 +5,6 @@
 
 void introduce();
 void print_clock(clock_t *clk);
+void time(clock_t *clk);
+
 #endif

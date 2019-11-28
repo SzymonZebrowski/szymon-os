@@ -13,6 +13,16 @@ void user_input(char *input){
         kprint("Stopping the CPU. Bye!\n",color_mode(BLACK,WHITE));
         asm volatile("hlt");
     }
+    else if(strcmp(input, "TIME") == 0){
+        get_time();
+    }
+     else if(strcmp(input, "CLEAR") == 0){
+        clear_screen();
+    }
+      else if(strcmp(input, "OS") == 0){
+        clear_screen();
+        introduce();
+    }
     //kprint(input,color_mode(BLACK,WHITE));
     kprint("> ",color_mode(BLACK,WHITE));
 }

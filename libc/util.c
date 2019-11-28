@@ -94,4 +94,27 @@ void print_clock(clock_t *clk){
     set_cursor_offset(offset);
 }
 
+void time(clock_t *clk){
+    char str[256];
+    int_to_0_at_beg_str(clk->month, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint("-", color_mode(BLACK, RED));
+    int_to_0_at_beg_str(clk->day, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint("-", color_mode(BLACK, RED));
+    int_to_0_at_beg_str(clk->year, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint("  ", color_mode(BLACK, RED));
+
+    int_to_0_at_beg_str(clk->hour, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint(":", color_mode(BLACK, RED));
+    int_to_0_at_beg_str(clk->minute, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint(":", color_mode(BLACK, RED));
+    int_to_0_at_beg_str(clk->second, str);
+    kprint(str, color_mode(BLACK, RED));
+    kprint("\n", color_mode(BLACK, RED));
+}
+
 #endif

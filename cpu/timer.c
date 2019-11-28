@@ -29,6 +29,12 @@ static void timer_callback(registers_t regs) {
     }
 }
 
+void get_time(){
+    clock_t* clk = (clock_t*)read_rtc();
+    
+    time(clk);
+}
+
 void init_timer(u32 freq) {
     /* Install the function we just wrote */
     register_interrupt_handler(IRQ0, timer_callback);
