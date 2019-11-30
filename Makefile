@@ -17,10 +17,10 @@ os-image.bin: boot/32bit-main.bin kernel.bin
 	cat $^ > $@
 
 kernel.bin: boot/kernel_entry.o ${OBJ}
-	${LD} -o $@ -Ttext 0x1000 $^ --oformat binary
+	${LD} -T link.ld -o $@ -Ttext 0x1000 $^ --oformat binary
 
 kernel.elf: boot/kernel_entry.o ${OBJ}
-	${LD} -o $@ -Ttext 0x1000 $^ 
+	${LD} -T link.ld -o $@ -Ttext 0x1000 $^ 
 
 run: os-image.bin
 	qemu-system-i386 -fda $<
