@@ -11,7 +11,7 @@ print_hex:              ; printing 0-9 and a-f
 
 loop:
     cmp cx, 4
-    je end
+    je hex_end
 
     mov ax, dx          ; dx contains letters
     and ax, 0x000f      ; get the last character
@@ -30,7 +30,7 @@ move_to_mem:
     inc cx
     jmp loop
 
-end:
+hex_end:
 
     mov bx, RESULT  ; print function require address in bx
     call print

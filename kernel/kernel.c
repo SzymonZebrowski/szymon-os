@@ -7,6 +7,8 @@
 #include "../cpu/idt.h"
 #include "../cpu/timer.h"
 #include "../cpu/clock.h"
+#include "../cpu/paging.h"
+
 
 void user_input(char *input){
     if (strcmp(input, "END") == 0) {
@@ -35,4 +37,8 @@ void main(){
 
     isr_install();
     irq_install();
+
+    //init_paging();
+
+    int *xx =  (int*)0xa00000000;
 }

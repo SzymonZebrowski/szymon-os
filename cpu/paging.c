@@ -5,7 +5,7 @@ u32 nframes;
 
 //page directories
 page_directory_t *kernel_directory=0;
-page_directory_t *current_directory=0;
+page_directory_t *current_directory=&kernel_directory;
 
 extern u32 placement_address;
 
@@ -74,6 +74,7 @@ void alloc_frame(page_t *page, int is_kernel, int is_writeable){
         page->rw = is_writeable? 1:0;
         page->user = is_kernel? 0:1;
         page->frame=idx;
+        page->unused |= 0x10;
     }
 }
 
@@ -86,8 +87,8 @@ void free_frame(page_t *page){
     }
 }
 
-void initialise_paging(){
-    u32 mem_end_page = 0x40000000;  // assume that physical memory is 1GB
+void init_paging(){
+    u32 mem_end_page = 0x1000000;  // assume that physical memory is 1GB
     nframes = mem_end_page / 0x1000;
     frames = (u32*)kmalloc(INDEX_FROM_BIT(nframes));
     memory_set(frames, 0, INDEX_FROM_BIT(nframes));
@@ -97,22 +98,31 @@ void initialise_paging(){
     current_directory = kernel_directory;
 
     int i=0;
+    page_t *p;
     while(i < placement_address){
-        alloc_frame(get_page(i, 1, kernel_directory), 0,0);
+        p = get_page(i, 1, kernel_directory);
+        alloc_frame(p, 0,0);
         i += 0x1000;
     }
 
     register_interrupt_handler(14, page_fault);
+    //asm volatile("cli");
     switch_page_directory(kernel_directory);
+
 }
 
 void switch_page_directory(page_directory_t* new_pd){
     current_directory = new_pd;
-    asm("mov %0, %%cr3" :: "r"(&new_pd->tablesPhysical));
+    asm volatile("mov %0, %%cr3" :: "r"(new_pd->tablesPhysical));
     u32 cr0;
-    asm("mov %%cr0, %0": "=r"(cr0));
+    asm volatile("mov %%cr0, %0": "=r"(cr0));
     cr0 |= 0x80000000;  //oldest bit enables paging;
-    asm("mov %0, %%cr0":: "r"(cr0));
+    asm volatile ("mov %0, %%cr0" :: "r" (cr0));
+    
+    // Branch (???)    
+	if (cr0 % 2) {
+		asm volatile ("nop");
+	}
 }
 
 page_t *get_page(u32 address, int make, page_directory_t *dir){
@@ -149,10 +159,12 @@ void page_fault(registers_t regs){
     if(us) kprint("user-mode ", color_mode(BLACK|WHITE));
     if(reserved) kprint("reserved ", color_mode(BLACK|WHITE));
     kprint(") at", color_mode(BLACK|WHITE));
-    char str[256] = int_to_str_hex(faulting_address);
+    char str[256];
+    int_to_hex_str(faulting_address, str);
     kprint(str, color_mode(BLACK|WHITE));
     kprint("\n",color_mode(BLACK|WHITE));
 
-    asm("jmp $");
+    //asm volatile("cli");
+    while(1);
     kprint("xd",color_mode(BLACK|BRIGHT_BLUE));
 }

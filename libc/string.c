@@ -29,6 +29,30 @@ void int_to_str(int n, char str[]){
     str[++i]='\0';
 
 }
+
+void int_to_hex_str(int n, char str[]){
+    int i=0;
+    int pom;
+
+    do{
+        pom = n%16;
+        if(pom < 10) str[i++]= '0' + pom;
+        else str[i++]='A' + pom - 10;
+    } while(n/=16);
+    
+    i-=1;
+
+    int j=0;
+    for(j; j<(i+1)/2;j++){
+            char t=str[j];
+            str[j] = str[i-j];
+            str[i-j] = t;
+    }
+    
+    str[++i]='\0';
+}
+
+
 void reverse(char str[]){
     int i = strlen(str);
     int j=0;

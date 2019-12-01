@@ -40,7 +40,7 @@ typedef struct page_directory
     u32 physicalAddr;
 } page_directory_t;
 
-void initialise_paging();
+void init_paging();
 
 /**
   Causes the specified page directory to be loaded into the
