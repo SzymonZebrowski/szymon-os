@@ -5,6 +5,8 @@
 #include "isr.h"
 
 u32 tick = 0;
+static u32 divisor;
+static volatile u32 sleeping = 0;
 static u32 pit_timeout_value = 0;
 
 void pit_timeout_set(u32 val){
@@ -24,6 +26,7 @@ static void timer_callback(registers_t regs) {
 
     print_clock(clk);
 
+    if(sleeping) sleeping--;
     if(pit_timeout_value){
         pit_timeout_value--;
     }
@@ -40,11 +43,16 @@ void init_timer(u32 freq) {
     register_interrupt_handler(IRQ0, timer_callback);
 
     /* Get the PIT value: hardware clock at 1193180 Hz */
-    u32 divisor = 1193180 / freq;
+    divisor = 1193180 / freq;
     u8 low  = (u8)(divisor & 0xFF);
     u8 high = (u8)( (divisor >> 8) & 0xFF);
     /* Send the command */
     port_byte_out(0x43, 0x36); /* Command port */
     port_byte_out(0x40, low);
     port_byte_out(0x40, high);
+}
+
+void sleep(u32 ms){
+    sleeping = (ms/((float)10000/divisor))+1;
+    while(sleeping);
 }

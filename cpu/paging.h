@@ -19,7 +19,7 @@ typedef struct page
 typedef struct page_table
 {
    page_t pages[1024];
-} page_table_t;
+} page_table_t __attribute__((aligned(4096)));
 
 typedef struct page_directory
 {
@@ -38,7 +38,7 @@ typedef struct page_directory
         may be in a different location in virtual memory.
     **/
     u32 physicalAddr;
-} page_directory_t;
+} page_directory_t __attribute__((aligned(4096)));
 
 void init_paging();
 

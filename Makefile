@@ -23,10 +23,10 @@ kernel.elf: boot/kernel_entry.o ${OBJ}
 	${LD} -T link.ld -o $@ -Ttext 0x1000 $^ 
 
 run: os-image.bin
-	qemu-system-i386 -fda $<
+	qemu-system-i386 -fda $< -hda pnd.img -boot d
 
 debug: os-image.bin kernel.elf
-	qemu-system-i386 -s -fda os-image.bin -d guest_errors,int &
+	qemu-system-i386 -s -fda os-image.bin -hda pnd.img -boot d -d guest_errors,int &
 	gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 %.o: %.c ${HEADERS}

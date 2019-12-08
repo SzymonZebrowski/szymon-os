@@ -52,6 +52,25 @@ void int_to_hex_str(int n, char str[]){
     str[++i]='\0';
 }
 
+void byte_converter(int n, char str[]){
+    int i=0;
+    int pom;
+
+    
+    pom = n%16;
+    if(pom < 10) str[i++]= '0' + pom;
+    else str[i++]='A' + pom - 10;
+    n/=16;
+    pom = n%16;
+    if(pom < 10) str[i++]= '0' + pom;
+    else str[i++]='A' + pom - 10;
+    
+    char p = str[0];
+    str[0]=str[1];
+    str[1]=p;
+    
+    str[2]='\0';
+}
 
 void reverse(char str[]){
     int i = strlen(str);

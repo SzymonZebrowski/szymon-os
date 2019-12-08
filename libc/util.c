@@ -2,7 +2,7 @@
 #define UTIL_H
 
 #include "../drivers/screen.h"
-
+#include "string.h"
 #include "../cpu/types.h"
 #include "../cpu/clock.h"
 
@@ -115,6 +115,19 @@ void time(clock_t *clk){
     int_to_0_at_beg_str(clk->second, str);
     kprint(str, color_mode(BLACK, RED));
     kprint("\n", color_mode(BLACK, RED));
+}
+
+void print_memory(u8 data[], int n){
+    char str[3];
+    for(int i=0; i<n; i++){
+        byte_converter(data[i], str);
+        //int_to_hex_str(data[i], str);
+        if(i%4==0 && i%16!=0) kprint(" ", color_mode(RED, CYAN));
+        if(i%16==0 && i!=0) kprint("\n", color_mode(BLACK, CYAN));
+        kprint(str, color_mode(BLACK, CYAN));
+
+    }
+
 }
 
 #endif

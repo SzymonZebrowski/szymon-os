@@ -8,7 +8,7 @@ page_directory_t *kernel_directory=0;
 page_directory_t *current_directory=&kernel_directory;
 
 extern u32 placement_address;
-
+extern void enable_paging();
 // using bitmap for storing information about presence of frame-
 //1 bit is enough to give necessary information;
 
@@ -108,21 +108,17 @@ void init_paging(){
     register_interrupt_handler(14, page_fault);
     //asm volatile("cli");
     switch_page_directory(kernel_directory);
-
+    enable_paging(kernel_directory);
+    int asjd = 1023;
 }
 
 void switch_page_directory(page_directory_t* new_pd){
     current_directory = new_pd;
-    asm volatile("mov %0, %%cr3" :: "r"(new_pd->tablesPhysical));
+    asm volatile("mov %0, %%cr3" :: "r"(&new_pd->tablesPhysical));
     u32 cr0;
     asm volatile("mov %%cr0, %0": "=r"(cr0));
     cr0 |= 0x80000000;  //oldest bit enables paging;
     asm volatile ("mov %0, %%cr0" :: "r" (cr0));
-    
-    // Branch (???)    
-	if (cr0 % 2) {
-		asm volatile ("nop");
-	}
 }
 
 page_t *get_page(u32 address, int make, page_directory_t *dir){

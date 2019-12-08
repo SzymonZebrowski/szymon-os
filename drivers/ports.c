@@ -13,13 +13,13 @@ void port_byte_out(u16 port, u8 data){
     asm("out %%al, %%dx" : : "a" (data), "d" (port));
 }
 
-u8 port_word_in(u16 port){
-    u8 result;   
+u16 port_word_in(u16 port){
+    u16 result;   
 
     asm("in %%dx, %%ax" : "=a" (result) : "d" (port));
     //word from port in dx goes to al register
 
-     return result;
+    return result;
 }
 
 void port_word_out(u16 port, u16 data){
