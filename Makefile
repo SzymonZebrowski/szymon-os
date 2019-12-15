@@ -4,7 +4,7 @@
 
 C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
 HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
-OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
+OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o cpu/paging2.o}
 
 CC = ~/opt/cross/bin/i686-elf-gcc
 GDB = ~/opt/cross/bin/i686-elf-gdb

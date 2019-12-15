@@ -327,13 +327,21 @@ void ide_print_summary(){
             kprint(ide_devices[i].model, color_mode(BLACK,WHITE));
             kprint("\n",color_mode(BLACK,WHITE));   
         }
-
+    /*
     u8 readdd[1024];
     u8 drive = 0;
     //1236725760
     u8 x = ide_ata_access(0,drive,0,1,readdd);
     ide_print_error(drive, x);
     print_memory(readdd, 512);
+    */
+}
+
+void read_from_disk(u8 drive, u8 start_sector, u8 n_sectors, u8 data[]){
+    u8 x= ide_ata_access(0,drive,start_sector, n_sectors, data);
+    ide_print_error(drive, x);
+    print_memory(data, 512*n_sectors);
+    kprint("\n", color_mode(BLACK,WHITE));
 }
 
 u8 ide_ata_access(u8 direction, u8 drive, u32 lba, u32 numsects, u16 * data) {
