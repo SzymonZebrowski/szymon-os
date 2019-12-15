@@ -3,11 +3,12 @@
 #include "../libc/string.h"
 #include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
+#include "../drivers/ata.h"
 #include "../cpu/isr.h"
 #include "../cpu/idt.h"
 #include "../cpu/timer.h"
 #include "../cpu/clock.h"
-#include "../cpu/paging.h"
+#include "../cpu/paging2.h"
 
 
 void user_input(char *input){
@@ -18,13 +19,17 @@ void user_input(char *input){
     else if(strcmp(input, "TIME") == 0){
         get_time();
     }
-     else if(strcmp(input, "CLEAR") == 0){
+    else if(strcmp(input, "CLEAR") == 0){
         clear_screen();
         kprint("\n",color_mode(BLACK,WHITE));
     }
-      else if(strcmp(input, "OS") == 0){
+    else if(strcmp(input, "OS") == 0){
         clear_screen();
         introduce();
+    }
+    else if(strcmp(input, "DISK") == 0){
+        u8 data[512];
+        read_from_disk(0,0,1,data);
     }
     //kprint(input,color_mode(BLACK,WHITE));
     kprint("> ",color_mode(BLACK,WHITE));
@@ -33,12 +38,18 @@ void user_input(char *input){
 void main(){
     clear_screen();
     introduce();
-    kprint("> ",color_mode(BLACK,WHITE));
 
     isr_install();
     irq_install();
 
-    //init_paging();
+	ide_initialize(0x1F0, 0x3F6, 0x170, 0x376, 0x000);
+    ide_print_summary();
 
-    int *xx =  (int*)0xa00000000;
+    
+    kprint("> ",color_mode(BLACK,WHITE));
+    init_paging2();
+
+    kprint("\n> xdddd hellooo",color_mode(BLACK,WHITE));
+
+    int *t = (u32*)0xa00000000;
 }

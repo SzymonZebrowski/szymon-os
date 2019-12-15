@@ -86,15 +86,31 @@ void backspace(char s[]){
     int len = strlen(s);
     s[len-1] = '\0';
 }
+
 void append(char s[], char n){
     int len = strlen(s);
     s[len] = n;
     s[len+1]='\0';
 }
+
 int strcmp(char s1[], char s2[]){
     int i;
     for(i=0; s1[i]==s2[i]; i++){
         if(s1[i] == '\0') return 0;
     }
     return s1[i]-s2[i];
+}
+
+int starts_with(char s1[], char s2[]){ //s1 starts with s2
+    int i;
+    int len_s2 = strlen(s2);
+    int starts = 1;
+
+    for(i=0; i<len_s2; i++){
+        if(s1[i]!=s2[i]){
+            starts = 0;
+            break;
+        }
+    }
+    return starts;
 }

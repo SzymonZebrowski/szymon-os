@@ -9,5 +9,7 @@ int strlen(char s[]);
 void backspace(char s[]);
 void append(char s[], char n);
 int strcmp(char s1[], char s2[]);
+int starts_with(char s1[], char s2[]); //s1 starts with s2
+
 
 #endif
