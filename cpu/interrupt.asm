@@ -100,7 +100,6 @@ global irq13
 global irq14
 global irq15
 
-global enable_paging
 ; 0: Divide By Zero Exception
 isr0:
     cli
@@ -415,12 +414,3 @@ irq15:
 	push byte 15
 	push byte 47
 	jmp irq_common_stub
-
-
-enable_paging:
-    ;mov eax, 0x12304120
-    mov cr3, eax
-
-    mov eax, cr0
-    or eax, 0x80000000
-    mov cr0, eax

@@ -25,15 +25,16 @@ load_kernel:
     call print_nl
                                         ; we read 2 sectors from bootdisk and save it to [KERNEL_OFFSET]
     mov bx, KERNEL_OFFSET               ; ES:BX - pointer to buffer
-    mov dh, 31                      ; number of sectors to read
+    mov dh, 45                   ; number of sectors to read
     mov dl, [BOOT_DRIVE]                ; bootdisk
     call disk_load
     ret
 
 
-
+[GLOBAL start] 
 
 [bits 32]
+start:
 BEGIN_PM:
     mov ebx, MSG_32B_PM
     call print_string_pm
@@ -41,7 +42,6 @@ BEGIN_PM:
     
     jmp $
     
-[GLOBAL start] 
 [EXTERN end]
 
 MSG_16B_RM db "Started in 16 bit real mode", 0

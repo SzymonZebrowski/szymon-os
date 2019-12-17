@@ -4,11 +4,11 @@
 
 #include "types.h"
 
-void init_timer(u32 freq);
-void pit_timeout_set(u32 val);
+void init_timer(uint32_t freq);
+void pit_timeout_set(uint32_t val);
 void pit_timeout_unset();
 void get_time();
-u8 pit_timeout_reached();
-void sleep(u32 ms);
+uint8_t pit_timeout_reached();
+void sleep(uint32_t ms);
 
 #endif

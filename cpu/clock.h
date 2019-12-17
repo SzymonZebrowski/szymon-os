@@ -4,15 +4,15 @@
 #include "types.h"
 
 typedef struct {
-    u8 second;
-    u8 minute;
-    u8 hour;
-    u8 day;
-    u8 month;
-    u8 year;
-    u8 century;
+    uint8_t second;
+    uint8_t minute;
+    uint8_t hour;
+    uint8_t day;
+    uint8_t month;
+    uint8_t year;
+    uint8_t century;
 } clock_t;
 
-u32 read_rtc();
+uint32_t read_rtc();
 
 #endif

@@ -3,11 +3,11 @@
 
 #include "../cpu/types.h"
 
-void memory_copy(u8 *source, u8 *dest, u32 nbytes);
-void memory_set(u8 *dest, u8 val, u32 len);
+void memory_copy(uint8_t *source, uint8_t *dest, uint32_t nbytes);
+void memory_set(uint8_t *dest, uint8_t val, uint32_t len);
 
-u32 kmalloc_a(u32 sz);  // page aligned.
-u32 kmalloc(u32 sz); // normal.
-u32 kmalloc_ap(u32 sz, u32 *phys);
+uint32_t kmalloc_a(uint16_t sz);  // page aligned.
+uint32_t kmalloc(uint16_t sz); // normal.
+uint32_t kmalloc_ap(uint16_t sz, uint32_t *phys);
 
 #endif

@@ -6,8 +6,8 @@
 #define      ATA_READ      0x00
 #define      ATA_WRITE     0x01
 
-void ide_initialize(u32 BAR0, u32 BAR1, u32 BAR2, u32 BAR3, u32 BAR4);
-u8 ide_ata_access(u8 direction, u8 drive, u32 lba, u32 numsects, u16 * data);
+void ide_initialize(uint32_t BAR0, uint32_t BAR1, uint32_t BAR2, uint32_t BAR3, uint32_t BAR4);
+uint8_t ide_ata_access(uint8_t direction, uint8_t drive, uint32_t lba, uint32_t numsects, uint16_t * data);
 void ide_print_summary();
-void read_from_disk(u8 drive, u8 start_sector, u8 n_sectors, u8 data[]);
+void read_from_disk(uint8_t drive, uint8_t start_sector, uint8_t n_sectors, uint8_t data[]);
 #endif

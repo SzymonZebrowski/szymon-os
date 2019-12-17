@@ -10,7 +10,7 @@
 #define ENTER 0x1C
 
 static char key_buffer[256];
-u8 written_before_enter = 0;
+uint8_t written_before_enter = 0;
 
 #define SC_MAX 57
 const char *sc_name[] = { "ERROR", "Esc", "1", "2", "3", "4", "5", "6", 
@@ -27,7 +27,7 @@ const char sc_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',
 
 static void keyboard_callback(registers_t regs) {
     /* The PIC leaves us the scancode in port 0x60 */
-    u8 scancode = port_byte_in(0x60);
+    uint8_t scancode = port_byte_in(0x60);
 
     if (scancode > SC_MAX) return;
     

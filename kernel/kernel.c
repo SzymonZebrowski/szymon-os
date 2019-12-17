@@ -28,14 +28,14 @@ void user_input(char *input){
         introduce();
     }
     else if(strcmp(input, "DISK") == 0){
-        u8 data[512];
+        uint8_t data[512];
         read_from_disk(0,0,1,data);
     }
     //kprint(input,color_mode(BLACK,WHITE));
     kprint("> ",color_mode(BLACK,WHITE));
 }
 
-void main(){
+void kmain(){
     clear_screen();
     introduce();
 
@@ -48,8 +48,4 @@ void main(){
     
     kprint("> ",color_mode(BLACK,WHITE));
     init_paging2();
-
-    kprint("\n> xdddd hellooo",color_mode(BLACK,WHITE));
-
-    int *t = (u32*)0xa00000000;
 }

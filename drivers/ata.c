@@ -90,8 +90,8 @@ struct IDEChannelRegisters {
     unsigned char  nIEN;  // nIEN (No Interrupt);
 } channels[2];
 
-u8 ide_buf[2048] = {0};
-static u8 ide_irq_invoked = 0;
+uint8_t ide_buf[2048] = {0};
+static uint8_t ide_irq_invoked = 0;
 
 struct ide_device {
     unsigned char  reserved;    // 0 (Empty) or 1 (This Drive really exists).
@@ -105,7 +105,7 @@ struct ide_device {
     unsigned char  model[41];   // Model in string.
 } ide_devices[4];
 
-u8 ide_read(unsigned char channel, unsigned char reg) {
+uint8_t ide_read(unsigned char channel, unsigned char reg) {
     unsigned char result;
     if (reg > 0x07 && reg < 0x0C)
         ide_write(channel, ATA_REG_CONTROL, 0x80 | channels[channel].nIEN);
@@ -122,7 +122,7 @@ u8 ide_read(unsigned char channel, unsigned char reg) {
     return result;
 }
 
-u8 ide_read_word(unsigned char channel, unsigned char reg) {
+uint8_t ide_read_word(unsigned char channel, unsigned char reg) {
     unsigned char result;
     if (reg > 0x07 && reg < 0x0C)
         ide_write(channel, ATA_REG_CONTROL, 0x80 | channels[channel].nIEN);
@@ -154,7 +154,7 @@ void ide_write(unsigned char channel, unsigned char reg, unsigned char data) {
         ide_write(channel, ATA_REG_CONTROL, channels[channel].nIEN);
 }
 
-u8 ide_polling(u8 channel, u32 advanced_check) {
+uint8_t ide_polling(uint8_t channel, uint32_t advanced_check) {
     
     // (I) Delay 400 nanosecond for BSY to be set:
     // -------------------------------------------------
@@ -167,7 +167,7 @@ u8 ide_polling(u8 channel, u32 advanced_check) {
         ; // Wait for BSY to be zero.
     
     if (advanced_check) {
-        u8 state = ide_read(channel, ATA_REG_STATUS); // Read Status Register.
+        uint8_t state = ide_read(channel, ATA_REG_STATUS); // Read Status Register.
     
         // (III) Check For Errors:
         // -------------------------------------------------
@@ -220,8 +220,8 @@ unsigned char ide_print_error(unsigned int drive, unsigned char err) {
 }
 
 
-void ide_initialize(unsigned int BAR0, unsigned int BAR1, unsigned int BAR2, unsigned int BAR3,
-unsigned int BAR4) {
+void ide_initialize(uint32_t BAR0, uint32_t BAR1, uint32_t BAR2, uint32_t BAR3,
+uint32_t BAR4) {
  
    int i, j, k, count = 0;
  
@@ -283,24 +283,24 @@ unsigned int BAR4) {
          // (V) Read Identification Space of the Device:
         for(int l = 0; l<256; l++)
 		{
-			*(u16 *)(ide_buf + l*2) = ide_read_word(i, ATA_REG_DATA);
+			*(uint16_t *)(ide_buf + l*2) = ide_read_word(i, ATA_REG_DATA);
 		} 
          // (VI) Read Device Parameters:
          ide_devices[count].reserved     = 1;
          ide_devices[count].type         = type;
          ide_devices[count].channel      = i;
          ide_devices[count].drive        = j;
-         ide_devices[count].signature    = *((u16 *)(ide_buf + ATA_IDENT_DEVICETYPE));
-         ide_devices[count].capabilities = *((u16 *)(ide_buf + ATA_IDENT_CAPABILITIES));
-         ide_devices[count].commandSets  = *((u32 *)(ide_buf + ATA_IDENT_COMMANDSETS));
+         ide_devices[count].signature    = *((uint16_t *)(ide_buf + ATA_IDENT_DEVICETYPE));
+         ide_devices[count].capabilities = *((uint16_t *)(ide_buf + ATA_IDENT_CAPABILITIES));
+         ide_devices[count].commandSets  = *((uint32_t *)(ide_buf + ATA_IDENT_COMMANDSETS));
  
          // (VII) Get Size:
          if (ide_devices[count].commandSets & (1 << 26))
             // Device uses 48-Bit Addressing:
-            ide_devices[count].size   = *((u32 *)(ide_buf + ATA_IDENT_MAX_LBA_EXT));
+            ide_devices[count].size   = *((uint32_t *)(ide_buf + ATA_IDENT_MAX_LBA_EXT));
          else
             // Device uses CHS or 28-bit Addressing:
-            ide_devices[count].size   = *((u32 *)(ide_buf + ATA_IDENT_MAX_LBA));
+            ide_devices[count].size   = *((uint32_t *)(ide_buf + ATA_IDENT_MAX_LBA));
  
          // (VIII) String indicates model of device (like Western Digital HDD and SONY DVD-RW...):
         for(k = 0; k < 40; k += 2) {
@@ -328,23 +328,23 @@ void ide_print_summary(){
             kprint("\n",color_mode(BLACK,WHITE));   
         }
     /*
-    u8 readdd[1024];
-    u8 drive = 0;
+    uint8_t readdd[1024];
+    uint8_t drive = 0;
     //1236725760
-    u8 x = ide_ata_access(0,drive,0,1,readdd);
+    uint8_t x = ide_ata_access(0,drive,0,1,readdd);
     ide_print_error(drive, x);
     print_memory(readdd, 512);
     */
 }
 
-void read_from_disk(u8 drive, u8 start_sector, u8 n_sectors, u8 data[]){
-    u8 x= ide_ata_access(0,drive,start_sector, n_sectors, data);
+void read_from_disk(uint8_t drive, uint8_t start_sector, uint8_t n_sectors, uint8_t data[]){
+    uint8_t x= ide_ata_access(0,drive,start_sector, n_sectors, data);
     ide_print_error(drive, x);
     print_memory(data, 512*n_sectors);
     kprint("\n", color_mode(BLACK,WHITE));
 }
 
-u8 ide_ata_access(u8 direction, u8 drive, u32 lba, u32 numsects, u16 * data) {
+uint8_t ide_ata_access(uint8_t direction, uint8_t drive, uint32_t lba, uint32_t numsects, uint16_t * data) {
     unsigned char lba_mode /* 0: CHS, 1:LBA28, 2: LBA48 */, dma /* 0: No DMA, 1: DMA */, cmd;
     unsigned char lba_io[6];
     unsigned int  channel      = ide_devices[drive].channel; // Read the Channel.
@@ -424,8 +424,8 @@ u8 ide_ata_access(u8 direction, u8 drive, u32 lba, u32 numsects, u16 * data) {
     if (lba_mode == 2 && direction == ATA_WRITE) cmd = ATA_CMD_WRITE_PIO_EXT;
     ide_write(channel, ATA_REG_COMMAND, cmd);
     
-    u16 xxx;
-    u8 str[256];
+    uint16_t xxx;
+    uint8_t str[256];
     if (direction == 0)
          // PIO Read.
     for (i = 0; i < numsects; i++) {

@@ -6,6 +6,6 @@
 void introduce();
 void print_clock(clock_t *clk);
 void time(clock_t *clk);
-void print_memory(u8 data[], int n);
+void print_memory(uint8_t data[], int n);
 
 #endif

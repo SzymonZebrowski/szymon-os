@@ -67,7 +67,7 @@ void introduce(){
 }
 
 void print_clock(clock_t *clk){
-    u32 offset = get_cursor_offset();
+    uint32_t offset = get_cursor_offset();
 
     char str[256];
     int_to_0_at_beg_str(clk->month, str);
@@ -117,7 +117,7 @@ void time(clock_t *clk){
     kprint("\n", color_mode(BLACK, RED));
 }
 
-void print_memory(u8 data[], int n){
+void print_memory(uint8_t data[], int n){
     char str[3];
     for(int i=0; i<n; i++){
         byte_converter(data[i], str);

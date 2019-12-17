@@ -4,12 +4,12 @@
 #include "clock.h"
 #include "isr.h"
 
-u32 tick = 0;
-static u32 divisor;
-static volatile u32 sleeping = 0;
-static u32 pit_timeout_value = 0;
+uint32_t tick = 0;
+static uint32_t divisor;
+static volatile uint32_t sleeping = 0;
+static uint32_t pit_timeout_value = 0;
 
-void pit_timeout_set(u32 val){
+void pit_timeout_set(uint32_t val){
     pit_timeout_value = val;
 }
 
@@ -17,7 +17,7 @@ void pit_timeout_unset() {
     pit_timeout_value = 0;
 }
 
-u8 pit_timeout_reached(){
+uint8_t pit_timeout_reached(){
     return !(pit_timeout_value>0);
 }
 
@@ -38,21 +38,21 @@ void get_time(){
     time(clk);
 }
 
-void init_timer(u32 freq) {
+void init_timer(uint32_t freq) {
     /* Install the function we just wrote */
     register_interrupt_handler(IRQ0, timer_callback);
 
     /* Get the PIT value: hardware clock at 1193180 Hz */
     divisor = 1193180 / freq;
-    u8 low  = (u8)(divisor & 0xFF);
-    u8 high = (u8)( (divisor >> 8) & 0xFF);
+    uint8_t low  = (uint8_t)(divisor & 0xFF);
+    uint8_t high = (uint8_t)( (divisor >> 8) & 0xFF);
     /* Send the command */
     port_byte_out(0x43, 0x36); /* Command port */
     port_byte_out(0x40, low);
     port_byte_out(0x40, high);
 }
 
-void sleep(u32 ms){
+void sleep(uint32_t ms){
     sleeping = (ms/((float)10000/divisor))+1;
     while(sleeping);
 }

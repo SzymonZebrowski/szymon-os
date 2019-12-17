@@ -1,22 +1,22 @@
 #include "mem.h"
 
-extern u32 end;
-//u32 placement_address = (u32)&end;
-u32 placement_address = 0x10000;
+extern uint32_t end;
+//uint32_t placement_address = (uint32_t)&end;
+uint32_t placement_address = 0x10000;
 
-void memory_copy(u8 *source, u8 *dest, u32 nbytes) {
+void memory_copy(uint8_t *source, uint8_t *dest, uint32_t nbytes) {
     int i;
     for (i = 0; i < nbytes; i++) {
         *(dest + i) = *(source + i);
     }
 }
 
-void memory_set(u8 *dest, u8 val, u32 len) {
-    u8 *temp = (u8 *)dest;
+void memory_set(uint8_t *dest, uint8_t val, uint32_t len) {
+    uint8_t *temp = (uint8_t *)dest;
     for ( ; len != 0; len--) *temp++ = val;
 }
 
-u32 kmalloc_int(u32 s, int align, u32 *phys){
+uint32_t kmalloc_int(uint16_t s, int align, uint32_t *phys){
     if(align && (placement_address & 0xFFFFF000)){  //if not already aligned
         placement_address &= 0xFFFFF000;
         placement_address += 0x1000;
@@ -25,20 +25,20 @@ u32 kmalloc_int(u32 s, int align, u32 *phys){
     {
         *phys = placement_address;
     }
-    u32 tmp = placement_address;
+    uint32_t tmp = placement_address;
     placement_address += s;
     return tmp;
 }
 
-u32 kmalloc_a(u32 s){
+uint32_t kmalloc_a(uint16_t s){
     return kmalloc_int(s, 1, 0);
 };  // page aligned.
 
-u32 kmalloc_ap(u32 sz, u32 *phys)
+uint32_t kmalloc_ap(uint16_t s, uint32_t *phys)
 {
-    return kmalloc_int(sz, 1, phys);
+    return kmalloc_int(s, 1, phys);
 }
 
-u32 kmalloc(u32 s){
+uint32_t kmalloc(uint16_t s){
     return kmalloc_int(s, 0, 0);
 }; // normal.

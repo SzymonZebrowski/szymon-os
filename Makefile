@@ -4,7 +4,7 @@
 
 C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
 HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
-OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o cpu/paging2.o}
+OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
 CC = ~/opt/cross/bin/i686-elf-gcc
 GDB = ~/opt/cross/bin/i686-elf-gdb
@@ -23,6 +23,7 @@ kernel.elf: boot/kernel_entry.o ${OBJ}
 	${LD} -T link.ld -o $@ -Ttext 0x1000 $^ 
 
 run: os-image.bin
+	cp $< os.img
 	qemu-system-i386 -fda $< -hda pnd.img -boot d
 
 debug: os-image.bin kernel.elf
@@ -39,5 +40,5 @@ debug: os-image.bin kernel.elf
 	nasm $< -f bin -o $@
 
 clean:
-	rm -rf *.bin *.dis *.o os-image.bin *.elf
+	rm -rf *.bin *.dis *.o os-image.bin *.elf os.img
 	rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o cpu/*.o libc/*.o

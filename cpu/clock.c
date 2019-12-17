@@ -5,7 +5,7 @@
 
 #define CURRENT_YEAR 2019
  
-u32 century_register = 0x00;   
+uint32_t century_register = 0x00;   
 
 enum {
       cmos_address = 0x70,
@@ -13,22 +13,22 @@ enum {
 };
 
  
-static u32 get_update_in_progress_flag() {
+static uint32_t get_update_in_progress_flag() {
       port_byte_out(cmos_address, 0x0A);
       return (port_byte_in(cmos_data) & 0x80);
 }
  
-static u8 get_RTC_register(u32 reg) {
+static uint8_t get_RTC_register(uint32_t reg) {
       port_byte_out(cmos_address, reg);
       return port_byte_in(cmos_data);
 }
 
-u32 read_rtc() {
+uint32_t read_rtc() {
     clock_t clk;
-    u8 registerB;
-    u8 last_second, last_minute, last_hour;
-    u8 last_day, last_month, last_year;
-    u8 last_century;
+    uint8_t registerB;
+    uint8_t last_second, last_minute, last_hour;
+    uint8_t last_day, last_month, last_year;
+    uint8_t last_century;
  
       // Note: This uses the "read registers until you get the same values twice in a row" technique
       //       to avoid getting dodgy/inconsistent values due to RTC updates
@@ -84,5 +84,5 @@ u32 read_rtc() {
           clk.hour = ((clk.hour & 0x7F) + 12) % 24;
     }
 
-    return (u32) &clk;
+    return (uint32_t) &clk;
 }

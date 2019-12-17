@@ -1,7 +1,7 @@
 print:
     pusha
 
-start:
+startx:
     mov al, [bx]
     cmp al, 0
     je done
@@ -10,7 +10,7 @@ start:
     int 0x10
 
     add bx, 1
-    jmp start
+    jmp startx
 
 done:
     popa
